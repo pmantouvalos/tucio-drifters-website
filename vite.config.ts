@@ -10,9 +10,21 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "three-vendor": ["three", "@react-three/fiber", "@react-three/drei"],
+          "particles-vendor": ["@tsparticles/react", "tsparticles-slim"],
+          "motion-vendor": ["framer-motion"],
+        },
+      },
     },
   },
 }));
