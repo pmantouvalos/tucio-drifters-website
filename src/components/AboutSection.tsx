@@ -1,27 +1,21 @@
-import { Users, Target, MapPin } from "lucide-react";
+import { Users, Target } from "lucide-react"; // Αφαίρεσα το MapPin που δεν χρειάζεται πια
 
 const aboutItems = [
   {
     icon: Users,
     title: "Who We Are",
     description:
-      "TUC.io Drifters is a passionate team of engineering students from the Technical University of Crete, united under the SenseLab research center. We're on a mission to push the boundaries of autonomous vehicle technology.",
+      "The TUC.io Drifters is a newly formed team of engineering students from the Technical University of Crete (TUC). We are part of the undergraduate team of SenseLab Research Group, under the supervision of Professor Panagiotis Partsinevelos.",
     color: "blue" as const,
   },
   {
     icon: Target,
     title: "What We Do",
     description:
-      "We develop cutting-edge autonomous driving solutions for scaled vehicles. This year marks our debut in the prestigious Bosch Future Mobility Challenge, where we'll showcase our innovative algorithms and engineering excellence.",
-    color: "green" as const,
+      "We are currently focused on the design and construction of a fully autonomous vehicle for the Bosch Future Mobility Challenge. As first-time participants in this competition, our team is dedicated to showcasing the highest level of commitment and skill in our inaugural year. This ambitious project allows us to gain deep practical expertise in advanced technical disciplines, including Automation, Machine Learning, Computer Vision, Robotics and Control Systems.",
+    color: "orange" as const,
   },
-  {
-    icon: MapPin,
-    title: "Where We Are",
-    description:
-      "Based at the Technical University of Crete, our team operates from state-of-the-art facilities equipped with everything needed to design, build, and test our autonomous vehicle systems.",
-    color: "red" as const,
-  },
+  // ΤΟ WHERE WE ARE ΔΙΑΓΡΑΦΗΚΕ ΑΠΟ ΕΔΩ
 ];
 
 const colorClasses = {
@@ -30,6 +24,12 @@ const colorClasses = {
     border: "border-neon-blue/30 hover:border-neon-blue",
     glow: "hover:shadow-[0_0_30px_hsl(200_100%_50%/0.2)]",
   },
+  orange: {
+    icon: "text-orange-500",
+    border: "border-orange-500/30 hover:border-orange-500",
+    glow: "hover:shadow-[0_0_30px_hsl(30_100%_50%/0.2)]",
+  },
+  // Κρατάμε τα υπόλοιπα χρώματα αν χρειαστούν στο μέλλον ή τα σβήνεις αν θες
   green: {
     icon: "text-neon-green",
     border: "border-neon-green/30 hover:border-neon-green",
@@ -56,9 +56,13 @@ const AboutSection = () => {
           <div className="h-1 w-24 mx-auto bg-gradient-to-r from-neon-blue to-neon-green" />
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {/* ΑΛΛΑΓΗ ΕΔΩ: 
+            1. md:grid-cols-2 (αντί για 3) για να έχουμε 2 στήλες.
+            2. max-w-5xl (αντί για 6xl) για να έρθουν πιο κεντρικά και μαζεμένα. 
+        */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {aboutItems.map((item, index) => {
-            const colors = colorClasses[item.color];
+            const colors = colorClasses[item.color]; 
             return (
               <div
                 key={item.title}

@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+// Εισαγωγή του λογοτύπου
+import teamLogo from "@/assets/transparent.png"; 
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -14,53 +17,125 @@ const navItems = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const ids = navItems.map((i) => i.href.replace("#", "")).filter(Boolean);
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`);
+          }
+        });
+      },
+      { threshold: 0.35, rootMargin: "-80px 0px -40% 0px" }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    
+    if (href === "#") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setIsOpen(false);
+      return;
+    }
+
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setIsOpen(false);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-3">
-            <div className="relative">
-              <span className="font-orbitron text-2xl font-bold">
-                <span className="neon-text-blue">TUC</span>
-                <span className="text-foreground">.io</span>
-              </span>
-              <span className="font-orbitron text-lg font-medium block -mt-1 neon-text-green">
-                Drifters
-              </span>
+        <div className="flex items-center justify-between h-16 sm:h-20 lg:h-24">
+          
+          {/* Logo - Scroll to top */}
+          <a 
+            href="#" 
+            onClick={(e) => handleScroll(e, "#")}
+            className="flex items-center cursor-pointer group"
+          >
+            <div className="relative flex items-center justify-center">
+              {/* Layer Λάμψης */}
+              <div 
+                className="absolute -inset-4 bg-gradient-to-r from-neon-blue/40 to-neon-green/40 rounded-full blur-2xl animate-pulse z-0 opacity-70 group-hover:opacity-100 transition-opacity duration-500"
+                style={{ animationDuration: '4s' }} 
+              />
+
+              {/* Εικόνα Λογοτύπου */}
+              <img
+                src={teamLogo}
+                alt="TUC.io Drifters Logo"
+                className="relative z-10 h-12 sm:h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
             </div>
           </a>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Left Side */}
           <div className="hidden lg:flex items-center gap-1">
-            {navItems.slice(0, 4).map((item) => (
+            {/* ΑΛΛΑΓΗ ΕΔΩ: slice(0, 5) αντί για (0, 4) για να πάρει και το Team */}
+            {navItems.slice(0, 5).map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors font-rajdhani font-medium tracking-wide"
+                onClick={(e) => handleScroll(e, item.href)}
+                className={`px-4 py-2 transition-colors font-rajdhani font-medium tracking-wide cursor-pointer border-b-2 ${
+                  activeSection === item.href
+                    ? "text-primary border-primary"
+                    : "text-muted-foreground hover:text-primary border-transparent"
+                }`}
               >
                 {item.label}
               </a>
             ))}
           </div>
 
-          {/* Center Logo Area (Desktop) */}
+          {/* Center Logo Area (Desktop spacer) */}
           <div className="hidden lg:block" />
 
-          {/* Desktop Navigation Right */}
+          {/* Desktop Navigation - Right Side */}
           <div className="hidden lg:flex items-center gap-1">
-            {navItems.slice(4, 6).map((item) => (
+            {/* ΑΛΛΑΓΗ ΕΔΩ: slice(5, 6) αντί για (4, 6) για να μείνει μόνο το Partners */}
+            {navItems.slice(5, 6).map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors font-rajdhani font-medium tracking-wide"
+                onClick={(e) => handleScroll(e, item.href)}
+                className={`px-4 py-2 transition-colors font-rajdhani font-medium tracking-wide cursor-pointer border-b-2 ${
+                  activeSection === item.href
+                    ? "text-primary border-primary"
+                    : "text-muted-foreground hover:text-primary border-transparent"
+                }`}
               >
                 {item.label}
               </a>
             ))}
-            <Button variant="neonGreen" size="sm" asChild>
-              <a href="#join">{navItems[6].label}</a>
+            
+            {/* --- Join Us Button (Πορτοκαλί) --- */}
+            <Button 
+              variant="outline"
+              size="sm" 
+              asChild
+              className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:shadow-[0_0_15px_rgba(249,115,22,0.5)] transition-all duration-300"
+            >
+              <a 
+                href="#join"
+                onClick={(e) => handleScroll(e, "#join")}
+              >
+                {navItems[6].label}
+              </a>
             </Button>
           </div>
 
@@ -82,10 +157,12 @@ const Navbar = () => {
                 <a
                   key={item.label}
                   href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`px-4 py-3 font-rajdhani font-medium tracking-wide transition-colors ${
+                  onClick={(e) => handleScroll(e, item.href)}
+                  className={`px-4 py-3 font-rajdhani font-medium tracking-wide transition-colors cursor-pointer ${
                     index === navItems.length - 1
-                      ? "text-neon-green"
+                      ? "text-orange-500 font-bold"
+                      : activeSection === item.href
+                      ? "text-primary"
                       : "text-muted-foreground hover:text-primary"
                   }`}
                 >

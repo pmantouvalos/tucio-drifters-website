@@ -83,12 +83,9 @@ const JoinSection = () => {
               We're looking for motivated students who want to gain hands-on experience in autonomous vehicle development, work with cutting-edge technology, and represent TUC on the international stage.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button variant="neonGreen" size="lg" asChild>
                 <a href="mailto:echaralampopoulo@tuc.gr" target="_blank" rel="noopener noreferrer">Apply Now</a>
-              </Button>
-              <Button variant="neonBlue" size="lg" asChild>
-                <a href="#">Open Positions</a>
               </Button>
             </div>
           </div>

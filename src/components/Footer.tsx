@@ -1,23 +1,54 @@
-import { Mail, MapPin, Linkedin, Instagram } from "lucide-react";
+// 1. Άλλαξα τα imports: Έβγαλα το Linkedin και έβαλα το Youtube
+import { Mail, MapPin, Instagram, Youtube } from "lucide-react";
+import teamLogo from "@/assets/transparent.png"; 
 
 const Footer = () => {
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    
+    if (href === "#") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const footerLinks = [
+    { name: "About", href: "#about" },
+    { name: "Lab", href: "#lab" },
+    { name: "Vehicle", href: "#vehicle" },
+    { name: "BFMC", href: "#bfmc" },
+    { name: "Team", href: "#team" },
+    { name: "Partners", href: "#partners" },
+    { name: "Join Us", href: "#join" },
+  ];
+
   return (
     <footer className="py-12 border-t border-border/50 bg-background">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
-          {/* Brand */}
+          {/* Brand - Logo */}
           <div>
-            <div className="mb-4">
-              <span className="font-orbitron text-2xl font-bold">
-                <span className="neon-text-blue">TUC</span>
-                <span className="text-foreground">.io</span>
-              </span>
-              <span className="font-orbitron text-lg font-medium block -mt-1 neon-text-green">
-                Drifters
-              </span>
+            <div className="mb-6">
+              <a 
+                href="#" 
+                onClick={(e) => handleScroll(e, "#")}
+                className="inline-block relative group cursor-pointer"
+              >
+                <div className="absolute -inset-6 bg-gradient-to-r from-neon-blue/30 to-neon-green/30 rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                <img 
+                  src={teamLogo} 
+                  alt="TUC.io Drifters" 
+                  className="relative z-10 h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </a>
             </div>
-            <p className="text-muted-foreground font-rajdhani">
-              Autonomous driving solutions for the Bosch Future Mobility Challenge
+            <p className="text-muted-foreground font-rajdhani max-w-sm">
+              Autonomous driving solutions for the Bosch Future Mobility Challenge. Pioneering innovation at the Technical University of Crete.
             </p>
           </div>
 
@@ -25,13 +56,14 @@ const Footer = () => {
           <div>
             <h4 className="font-orbitron font-bold text-foreground mb-4">Quick Links</h4>
             <nav className="space-y-2">
-              {["About", "Lab", "Vehicle", "BFMC", "Team", "Partners", "Join Us"].map((item) => (
+              {footerLinks.map((link) => (
                 <a
-                  key={item}
-                  href={`#${item.toLowerCase().replace(" ", "-").replace("!", "")}`}
-                  className="block text-muted-foreground hover:text-primary transition-colors font-rajdhani"
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleScroll(e, link.href)}
+                  className="block text-muted-foreground hover:text-primary transition-colors font-rajdhani cursor-pointer"
                 >
-                  {item}
+                  {link.name}
                 </a>
               ))}
             </nav>
@@ -60,6 +92,7 @@ const Footer = () => {
 
             {/* Social Links */}
             <div className="flex gap-4 mt-6">
+              {/* Instagram */}
               <a
                 href="https://www.instagram.com/tuc.io.drifters/"
                 target="_blank"
@@ -69,14 +102,16 @@ const Footer = () => {
               >
                 <Instagram size={20} />
               </a>
+
+              {/* YouTube (ΝΕΟ) */}
               <a
-                href="https://www.linkedin.com/in/panos-mantouvalos/"
+                href="https://www.youtube.com/@TUCioDrifters" // <--- ΒΑΛΕ ΕΔΩ ΤΟ LINK TOY YOUTUBE ΜΟΛΙΣ ΤΟ ΦΤΙΑΞΕΤΕ
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full border border-border hover:border-primary hover:text-primary transition-all"
-                aria-label="LinkedIn"
+                aria-label="YouTube"
               >
-                <Linkedin size={20} />
+                <Youtube size={20} />
               </a>
             </div>
           </div>
